@@ -57,13 +57,32 @@ request(options, (e, r, body) => {
             'redirect_to_ssl': 1,
             'authenticity_token': authenticity_token
         },
-        followRedirect: false,
+        followRedirect: true,
         jar: j
     }
 
     request(options, (e, r, body) => {
-        delim('POST login/canvas')
-        console.log(r.headers)
+        delim('POST login/canvas', r.headers)
+        
+        var csrf_token = decodeURIComponent(j.getCookieString('https://twilson.test.instructure.com').split(' ')[0])
+        var authenticity_token = csrf_token.substring(12, csrf_token.length -1)
+
+        var options = {
+            url: `${baseUrl}/login/oauth2/accept`,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+            form: {
+                'authenticity_token': authenticity_token
+            },
+            followRedirect: false,
+            jar: j
+        }
+
+        request(options, (e, r, body) => {
+            delim('POST login/oauth2/accept', r.headers)
+        })
     })
 })
 
