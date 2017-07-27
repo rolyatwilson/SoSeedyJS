@@ -8,9 +8,10 @@ const baseUrl = `https://${canvasDomain}`
 
 export function getToken(user, callback) {
     getLoginForm((cookieJar) => {
-        postLoginForm({loginId: 'teacher1', password: 'password'}, cookieJar, (cookieJar) => {
+        postLoginForm(user, cookieJar, (cookieJar) => {
             postAcceptForm(cookieJar, (authorizationCode) => {
                 oauth2AccessToken(authorizationCode, (accessToken) => {
+                    console.log(`Returning token: ${accessToken} for loginID: ${user.loginId}`)
                     callback(user, accessToken)
                 })
             })

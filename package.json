@@ -4,9 +4,9 @@
   "description": "SoSeedy in Node.js",
   "main": "index.js",
   "scripts": {
-    "build": "babel server -d build",
+    "build": "babel src -d build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel server -d build && node index.js"
+    "start": "babel src -d build && node index.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,5 +1,5 @@
 # Canvas Account Domain
-canvasDomain: 'twilson.test.instructure.com'
+canvasDomain: 'canvas.instructure.com'
 
 # Canvas Account Developer Key Information
 #   this is required to obtain user access tokens
