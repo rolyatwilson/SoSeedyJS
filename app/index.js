@@ -4,7 +4,8 @@ var request = require('request')
 
 const baseUrl = 'https://twilson.test.instructure.com'
 
-const clientId = '60400000000000005'
+const clientId = '60400000000000006'
+const clientSecret = '<SECRET>'
 const redirectUri = 'urn:ietf:wg:oauth:2.0:oob'
 const responseType = 'code'
 
@@ -72,7 +73,7 @@ request(options, (e, r, body) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
-            }
+            },
             form: {
                 'authenticity_token': authenticity_token
             },
@@ -82,6 +83,32 @@ request(options, (e, r, body) => {
 
         request(options, (e, r, body) => {
             delim('POST login/oauth2/accept', r.headers)
+
+            // with this we can now request a user access token for API calls
+            authorizationCode = r.headers['location'].match(/\?code=(.*)/)[1]
+            console.log(authorizationCode)
+
+            var options = {
+                url: `${baseUrl}/login/oauth2/token`,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                form: {
+                    'grant_type': 'authorization_code',
+                    'client_id': clientId,
+                    'client_secret': clientSecret,
+                    'redirect_uri': redirectUri,
+                    'code': authorizationCode
+                }
+            }
+
+            request(options, (e, r, body) => {
+                delim('POST login/oauth2/token', r.headers)
+
+                accessToken = JSON.parse(body)['access_token'] 
+                console.log(accessToken)
+            })
         })
     })
 })
