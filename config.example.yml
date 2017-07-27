@@ -1,0 +1,9 @@
+# Canvas Account Domain
+canvasDomain: 'twilson.test.instructure.com'
+
+# Canvas Account Developer Key Information
+#   this is required to obtain user access tokens
+developerKey:
+  clientId: '<DEVELOPER_KEY_ID>'
+  clientSecret: '<DEVELOPER_KEY_SECRET>'
+  redirectUri: 'urn:ietf:wg:oauth:2.0:oob'
