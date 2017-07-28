@@ -1,13 +1,18 @@
 const express = require('express')
 const server = express()
 const canvas = require('./api/canvas/oauth2.js')
+const path = require('path')
 
 server.get('/', (req, res) => {
     console.log(req.headers)
-    res.send('Hello World!')
+    res.sendFile(path.join(__dirname + '/html/index.html'))
 })
 
 server.get('/tokens', (req, res) => {
+
+    console.log('/tokens')
+    console.log(req.query)
+    console.log('-------')
     let user = req.query
     let loginId = user.loginId
     let password = user.password
@@ -29,16 +34,5 @@ server.get('/tokens', (req, res) => {
 server.listen(3000, () => {
     console.log('Server listening on port 3000!')
 })
-
-
-
-
-// example for calling canvas.getToken()
-// const canvas = require('./api/canvas/oauth2.js')
-
-// let user = {
-//     loginId: 'teacher1',
-//     password: 'password'
-// }
 
 

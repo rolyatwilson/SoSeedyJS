@@ -1,1 +1,1 @@
-require('./build/server/server.js')
+require('./build/server.js')

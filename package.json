@@ -4,15 +4,16 @@
   "description": "SoSeedy in Node.js",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d build",
+    "build": "rm -rf build && babel src -d build && cp -r src/html build/html",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel src -d build && node index.js"
+    "start": "npm run build && node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.15.3",
     "js-yaml": "^3.9.0",
+    "path": "^0.12.7",
     "request": "^2.81.0"
   },
   "devDependencies": {
