@@ -1,8 +1,8 @@
 var request = require('request')
 const constants = require('../constants.js')
-const canvasDomain = constants.CANVAS_DOMAIN
-const clientId = constants.DEVELOPER_KEY['clientId']
-const clientSecret = constants.DEVELOPER_KEY['clientSecret']
+export const canvasDomain = constants.CANVAS_DOMAIN
+export const clientId = constants.DEVELOPER_KEY['clientId']
+export const clientSecret = constants.DEVELOPER_KEY['clientSecret']
 const redirectUri = constants.DEVELOPER_KEY['redirectUri']
 const baseUrl = `https://${canvasDomain}`
 

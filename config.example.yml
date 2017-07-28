@@ -7,3 +7,7 @@ developerKey:
   clientId: '<DEVELOPER_KEY_ID>'
   clientSecret: '<DEVELOPER_KEY_SECRET>'
   redirectUri: 'urn:ietf:wg:oauth:2.0:oob'
+
+# Canvas Account Admin Access Token
+accountAdmin:
+  token: '<ACCOUNT_ADMIN_ACCESS_TOKEN>'
