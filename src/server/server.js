@@ -17,8 +17,12 @@ server.get('/tokens', (req, res) => {
         return
     }
     
-    canvas.getToken(user, (user, token) => {
-        res.send(`here's an access token for you :) --> ${token}`)
+    canvas.getToken(user, (token, err) => {
+        if (err) {
+            res.send(`that didn't go so well did it? ${err}`)
+        } else {
+            res.send(`here's an access token for you :) --> ${token}`)
+        }
     })
 })
 

@@ -7,15 +7,27 @@ const redirectUri = constants.DEVELOPER_KEY['redirectUri']
 const baseUrl = `https://${canvasDomain}`
 
 export function getToken(user, callback) {
-    getLoginForm((cookieJar) => {
-        postLoginForm(user, cookieJar, (cookieJar) => {
-            postAcceptForm(cookieJar, (authorizationCode) => {
-                oauth2AccessToken(authorizationCode, (accessToken) => {
-                    console.log(`Returning token: ${accessToken} for loginID: ${user.loginId}`)
-                    callback(user, accessToken)
-                })
+    getLoginForm((cookieJar, err) => {
+        if (err) {
+            callback(null, err)
+        } else {
+            postLoginForm(user, cookieJar, (cookieJar) => {
+                if (err) {
+                    callback(null, err)
+                } else {
+                    postAcceptForm(cookieJar, (authorizationCode, err) => {
+                        if (err) {
+                            callback(null, err)
+                        } else {
+                            oauth2AccessToken(authorizationCode, (accessToken, err) => {
+                                console.log(`Returning token: ${accessToken} for loginID: ${user.loginId}`)
+                                callback(accessToken, err)
+                            })
+                        }
+                    })
+                }
             })
-        })
+        }
     })
 }
 
@@ -28,7 +40,11 @@ export function getLoginForm(callback) {
         jar: cookieJar
     }
     request(options, (err, response, body) => {
-        callback(cookieJar)
+        if (err) {
+            callback(null, err)
+        } else {
+            callback(cookieJar, null)
+        }
     })
 }
 
@@ -50,7 +66,11 @@ export function postLoginForm(user, cookieJar, callback) {
         jar: cookieJar
     }
     request(options, (err, response, body) => {
-        callback(cookieJar)
+        if (err) {
+            callback(null, err)
+        } else {
+            callback(cookieJar, null)
+        }        
     })
 }
 
@@ -68,8 +88,22 @@ export function postAcceptForm(cookieJar, callback) {
         jar: cookieJar
     }
     request(options, (err, response, body) => {
-        let authorizationCode = response.headers['location'].match(/\?code=(.*)/)[1]
-        callback(authorizationCode)
+        let redirectLocation = response.headers['location']
+        if (err) {
+            callback(null, err)
+        } else if (!redirectLocation){
+            callback(null, { error: 'Redirect Location Not Found' })
+        } else {
+            let authorizationMatch = redirectLocation.match(/\?code=(.*)/)
+            if (!authorizationMatch) {
+                console.log('error here')
+                callback(null, { error: 'Authorization Code Not Found' })
+            } else {
+                console.log('success here')
+                let authorizationCode = authorizationMatch[1]
+                callback(authorizationCode, err)
+            }
+        }
     })
 }
 
@@ -90,7 +124,11 @@ export function oauth2AccessToken(authorizationCode, callback) {
     }
     request(options, (err, response, body) => {
         let accessToken = JSON.parse(body)['access_token'] 
-        callback(accessToken)
+        if (err || !accessToken) {
+            callback(null, err)
+        } else {
+            callback(accessToken, null)
+        }
     })
 }
 
