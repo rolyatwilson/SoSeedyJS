@@ -3,30 +3,30 @@ const server = express()
 const canvas = require('./api/canvas/oauth2.js')
 const path = require('path')
 
+server.set('views', path.join(__dirname, '../public/views'))
+server.set('view engine', 'ejs')
+
 server.get('/', (req, res) => {
-    console.log(req.headers)
-    res.sendFile(path.join(__dirname + '/html/index.html'))
+    res.render('pages/index')
 })
 
 server.get('/tokens', (req, res) => {
-
-    console.log('/tokens')
-    console.log(req.query)
-    console.log('-------')
     let user = req.query
     let loginId = user.loginId
     let password = user.password
     
     if (!loginId || !password) {
-        res.send('Oops, that sucks')
+        res.render('pages/token')
         return
     }
     
     canvas.getToken(user, (token, err) => {
         if (err) {
-            res.send(`that didn't go so well did it? ${err}`)
+            res.render('pages/token_failure')
         } else {
-            res.send(`here's an access token for you :) --> ${token}`)
+            res.render('pages/token_success', {
+                token: token
+            })
         }
     })
 })
