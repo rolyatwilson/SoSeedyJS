@@ -32,7 +32,7 @@ export function createUser(callback) {
     },
     body: JSON.stringify(body)
   }
-
+  
   request(options, (err, response, body) => {
     if (err || response.statusCode != 200) {
       callback(null, 'Failed to create user!')
