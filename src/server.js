@@ -96,8 +96,7 @@ server.get('/tokens', (req, res) => {
 server.get('/settings', (req, res) => {
   res.render('pages/settings', {
     domain: canvasOauth2.canvasDomain,
-    clientId: canvasOauth2.clientId,
-    clientSecret: canvasOauth2.clientSecret
+    clientId: canvasOauth2.clientId
   })
 })
 
