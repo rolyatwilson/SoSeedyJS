@@ -17,11 +17,17 @@
   </div>
   <div class="form-group">
     <label for="createUserCourses">Number of Courses</label>
-    <input id="createUserCourses" type="number" class="form-control" name="courses" placeholder="Number of Courses">  
+    <input id="createUserCourses" type="number" class="form-control" name="courses" value="3" placeholder="Number of Courses">  
   </div>
   <div class="form-group">
     <label for="createUserCourses">Enrollment Type</label>
-    <input id="createUserCourses" type="text" class="form-control" name="enrollmentType" placeholder="Enrollment Type">  
+    <select id="createUserCourses" class="custom-select" name="enrollmentType" placeholder="Enrollment Type">
+      <option selected value="TeacherEnrollment">Teacher</option>
+      <option value="StudentEnrollment">Student</option>
+      <option value="TaEnrollment">Ta</option>
+      <option value="ObserverEnrollment">Observer</option>
+      <option value="DesignerEnrollment">Designer</option>
+    </select>
   </div>
   <div class="form-group text-center">
     <input type="submit" class="btn btn-primary" style="width: 100%" value="Submit">  

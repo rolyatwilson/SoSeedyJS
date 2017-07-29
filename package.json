@@ -15,8 +15,10 @@
     "express": "^4.15.3",
     "js-yaml": "^3.9.0",
     "path": "^0.12.7",
+    "random-strings": "0.0.1",
     "request": "^2.81.0",
-    "time-diff": "^0.3.1"
+    "time-diff": "^0.3.1",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

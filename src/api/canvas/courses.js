@@ -3,9 +3,10 @@ const constants = require('../constants.js')
 const canvasDomain = constants.CANVAS_DOMAIN
 const adminToken = `Bearer ${constants.ACCOUNT_ADMIN['token']}`
 const baseUrl = `https://${canvasDomain}/api/v1/accounts/1`
+const random = require('../../random/index.js')
 
 export function createCourse(callback) {
-  let courseName = randomCourseName()
+  let courseName = random.courseName()
   let body = {
     course: {
       name: courseName,
@@ -31,9 +32,4 @@ export function createCourse(callback) {
       callback(JSON.parse(body), null)
     }
   })
-}
-
-export function randomCourseName() {
-  let options = constants.RANDOM_COURSE_NAMES
-  return options[Math.floor(Math.random() * options.length)]
 }

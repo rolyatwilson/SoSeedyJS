@@ -3,18 +3,21 @@ const constants = require('../constants.js')
 const canvasDomain = constants.CANVAS_DOMAIN
 const adminToken = `Bearer ${constants.ACCOUNT_ADMIN['token']}`
 const baseUrl = `https://${canvasDomain}/api/v1/accounts/1`
+const random = require('../../random/index.js')
 
-export function createUser(user, callback) {
+export function createUser(callback) {
+  let userName = random.userName()
+  let userNameTokens = userName.split(' ')
   let body = {
     user: {
-      name: `${user.firstName} ${user.lastName}`,
-      short_name: user.firstName,
-      sortable_name: `${user.lastName}, ${user.firstName}`,
+      name: userName,
+      short_name: userNameTokens[0],
+      sortable_name: `${userNameTokens[1]}, ${userNameTokens[0]}`,
       terms_of_use: true
     },
     pseudonym: {
-      unique_id: user.loginId,
-      password: user.password
+      unique_id: random.userLoginId(),
+      password: random.userPassword()
     },
     communication_channel: {
       skip_confirmation: true

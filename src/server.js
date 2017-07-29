@@ -15,23 +15,20 @@ server.get('/', (req, res) => {
 })
 
 server.get('/users', (req, res) => {
-  let user = req.query
-  let loginId = user.loginId
-  let password = user.password
-  let firstName = user.firstName
-  let lastName = user.lastName
-  let courses = user.courses
-  let enrollmentType = user.enrollmentType
+  let query = req.query
+  let courses = query.courses
+  let enrollmentType = query.enrollmentType
   
-  if (!loginId || !password || !firstName || !lastName || !courses || !enrollmentType) {
+  if (!courses || !enrollmentType) {
     res.render('pages/users')
     return
   }
 
+  let requestTime = new Date().getTime()
   let time = new Time()
-  time.start(loginId)
+  time.start(requestTime)
   let rendered = false
-  canvasUsers.createUser(user, (response, err) => {
+  canvasUsers.createUser((response, err) => {
     if (err || !response) {
       if (!rendered) {
         rendered = true
@@ -40,7 +37,7 @@ server.get('/users', (req, res) => {
       return
     }
 
-    let userId = response.id
+    let user = response
     for (let i = 0; i < courses; i++) {
       if (rendered) {
         return
@@ -53,7 +50,7 @@ server.get('/users', (req, res) => {
           }
           return
         }
-        canvasEnrollments.enrollUser(course, userId, enrollmentType, (enrollment, err) => {
+        canvasEnrollments.enrollUser(course, user.id, enrollmentType, (enrollment, err) => {
           if (err || enrollment === null) {
             if (!rendered) {
               rendered = true
@@ -63,10 +60,10 @@ server.get('/users', (req, res) => {
           }
           if (i == courses - 1) {
             res.render('pages/users_success', {
-              user: loginId, 
+              user: user.login_id, 
               courses: courses,
               enrollmentType: enrollmentType,
-              timeElapsed: time.end(loginId)
+              timeElapsed: time.end(requestTime)
             })
           }
         })
