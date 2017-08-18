@@ -4,6 +4,7 @@ const path = require('path')
 const Time = require('time-diff')
 const canvasOauth2 = require('./api/canvas/oauth2.js')
 const canvasCourses = require('./api/canvas/courses.js')
+const canvasFavorites = require('./api/canvas/favorites.js')
 const canvasEnrollments = require('./api/canvas/enrollments.js')
 const canvasUsers = require('./api/canvas/users.js')
 
@@ -38,6 +39,8 @@ server.get('/users', (req, res) => {
     }
 
     let user = response
+    let allCourses = []
+    let allEnrollments = []
     for (let i = 0; i < courses; i++) {
       if (rendered) {
         return
@@ -50,6 +53,7 @@ server.get('/users', (req, res) => {
           }
           return
         }
+        allCourses.push(course)
         canvasEnrollments.enrollUser(course, user.id, enrollmentType, (enrollment, err) => {
           if (err || enrollment === null) {
             if (!rendered) {
@@ -58,15 +62,15 @@ server.get('/users', (req, res) => {
             }
             return
           }
+          allEnrollments.push(enrollment)
           if (i == courses - 1) {
             res.send(JSON.stringify({
               user: {
                 login_id: user.login_id,
                 password: 'password'
               },
-              // TODO: make better, like make all the things better
-              courseCount: courses.length,
-              enrollmentType: enrollmentType
+              courses: allCourses,
+              enrollments: allEnrollments
             }))
           }
         })
@@ -91,6 +95,27 @@ server.get('/tokens', (req, res) => {
     } else {
       res.send(JSON.stringify({
         token: token
+      }))
+    }
+  })
+})
+
+server.post('/favorites', (req, res) => {
+  let query = req.query
+  let token = query.token
+  let courseId = query.courseId
+
+  if (!token || !courseId) {
+    res.render('pages/favorites_failure')
+    return
+  }
+
+  canvasFavorites.favoriteCourse(token, courseId, (favorite, err) => {
+    if (err) {
+      res.render('pages/favorites_failure')
+    } else {
+      res.send(JSON.stringify({
+        favorite: favorite
       }))
     }
   })

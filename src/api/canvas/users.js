@@ -2,7 +2,7 @@ var request = require('request')
 const constants = require('../constants.js')
 const canvasDomain = constants.CANVAS_DOMAIN
 const adminToken = `Bearer ${constants.ACCOUNT_ADMIN['token']}`
-const baseUrl = `https://${canvasDomain}/api/v1/accounts/1`
+const baseUrl = `https://${canvasDomain}/api/v1/accounts/self`
 const random = require('../../random/index.js')
 
 export function createUser(callback) {
