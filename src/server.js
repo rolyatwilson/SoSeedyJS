@@ -19,6 +19,8 @@ server.get('/users', (req, res) => {
   let courses = query.courses
   let enrollmentType = query.enrollmentType
   
+  let acceptsJson = req.accepts('json')
+
   if (!courses || !enrollmentType) {
     res.render('pages/users')
     return
@@ -59,12 +61,24 @@ server.get('/users', (req, res) => {
             return
           }
           if (i == courses - 1) {
-            res.render('pages/users_success', {
-              user: user.login_id, 
-              courses: courses,
-              enrollmentType: enrollmentType,
-              timeElapsed: time.end(requestTime)
-            })
+            if (acceptsJson) {
+              res.send(JSON.stringify({
+                user: {
+                  login_id: user.login_id,
+                  password: user.password
+                },
+                // TODO: make better, like make all the things better
+                courseCount: courses.length,
+                enrollmentType: enrollmentType
+              }))
+            } else {
+              res.render('pages/users_success', {
+                user: user.login_id,
+                courses: courses,
+                enrollmentType: enrollmentType,
+                timeElapsed: time.end(requestTime)
+              })
+            }
           }
         })
       })
