@@ -19,8 +19,6 @@ server.get('/users', (req, res) => {
   let courses = query.courses
   let enrollmentType = query.enrollmentType
   
-  let contentJson = req.get('content-type') == 'application/json'
-
   if (!courses || !enrollmentType) {
     res.render('pages/users')
     return
@@ -61,24 +59,15 @@ server.get('/users', (req, res) => {
             return
           }
           if (i == courses - 1) {
-            if (contentJson) {
-              res.send(JSON.stringify({
-                user: {
-                  login_id: user.login_id,
-                  password: 'password'
-                },
-                // TODO: make better, like make all the things better
-                courseCount: courses.length,
-                enrollmentType: enrollmentType
-              }))
-            } else {
-              res.render('pages/users_success', {
-                user: user.login_id,
-                courses: courses,
-                enrollmentType: enrollmentType,
-                timeElapsed: time.end(requestTime)
-              })
-            }
+            res.send(JSON.stringify({
+              user: {
+                login_id: user.login_id,
+                password: 'password'
+              },
+              // TODO: make better, like make all the things better
+              courseCount: courses.length,
+              enrollmentType: enrollmentType
+            }))
           }
         })
       })
@@ -90,8 +79,6 @@ server.get('/tokens', (req, res) => {
   let user = req.query
   let loginId = user.loginId
   let password = user.password
-
-  let contentJson = req.get('content-type') == 'application/json'
   
   if (!loginId || !password) {
     res.render('pages/token')
@@ -102,15 +89,9 @@ server.get('/tokens', (req, res) => {
     if (err) {
       res.render('pages/token_failure')
     } else {
-      if (contentJson) {
-        res.send(JSON.stringify({
-          token: token
-        }))
-      } else {
-        res.render('pages/token_success', {
-          token: token
-        })
-      }
+      res.send(JSON.stringify({
+        token: token
+      }))
     }
   })
 })
