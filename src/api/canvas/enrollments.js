@@ -13,7 +13,8 @@ export function enrollUser(course, userId, enrollmentType, callback) {
   let body = {
     enrollment: {
       user_id: userId,
-      type: enrollmentType
+      type: enrollmentType,
+      enrollment_state: 'active'
     }
   }
 
