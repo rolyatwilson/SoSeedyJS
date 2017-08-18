@@ -19,7 +19,7 @@ server.get('/users', (req, res) => {
   let courses = query.courses
   let enrollmentType = query.enrollmentType
   
-  let acceptsJson = req.accepts('json')
+  let contentJson = req.get('content-type') == 'application/json'
 
   if (!courses || !enrollmentType) {
     res.render('pages/users')
@@ -61,7 +61,7 @@ server.get('/users', (req, res) => {
             return
           }
           if (i == courses - 1) {
-            if (acceptsJson) {
+            if (contentJson) {
               res.send(JSON.stringify({
                 user: {
                   login_id: user.login_id,
@@ -91,7 +91,7 @@ server.get('/tokens', (req, res) => {
   let loginId = user.loginId
   let password = user.password
 
-  let acceptsJson = req.accepts('json')
+  let contentJson = req.get('content-type') == 'application/json'
   
   if (!loginId || !password) {
     res.render('pages/token')
@@ -102,7 +102,7 @@ server.get('/tokens', (req, res) => {
     if (err) {
       res.render('pages/token_failure')
     } else {
-      if (acceptsJson) {
+      if (contentJson) {
         res.send(JSON.stringify({
           token: token
         }))
