@@ -90,6 +90,8 @@ server.get('/tokens', (req, res) => {
   let user = req.query
   let loginId = user.loginId
   let password = user.password
+
+  let acceptsJson = req.accepts('json')
   
   if (!loginId || !password) {
     res.render('pages/token')
@@ -100,9 +102,15 @@ server.get('/tokens', (req, res) => {
     if (err) {
       res.render('pages/token_failure')
     } else {
-      res.render('pages/token_success', {
-        token: token
-      })
+      if (acceptsJson) {
+        res.send(JSON.stringify({
+          token: token
+        }))
+      } else {
+        res.render('pages/token_success', {
+          token: token
+        })
+      }
     }
   })
 })
