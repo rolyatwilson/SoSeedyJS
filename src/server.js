@@ -65,7 +65,7 @@ server.get('/users', (req, res) => {
               res.send(JSON.stringify({
                 user: {
                   login_id: user.login_id,
-                  password: user.password
+                  password: 'password'
                 },
                 // TODO: make better, like make all the things better
                 courseCount: courses.length,
