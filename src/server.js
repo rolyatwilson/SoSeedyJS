@@ -101,23 +101,30 @@ server.get('/tokens', (req, res) => {
 })
 
 server.post('/favorites', (req, res) => {
-  let query = req.query
-  let token = query.token
-  let courseId = query.courseId
+  var jsonString = ''
+  req.on('data', (data) => {
+    jsonString += data
+  })
 
-  if (!token || !courseId) {
-    res.render('pages/favorites_failure')
-    return
-  }
+  req.on('end', () => {
+    let json = JSON.parse(jsonString)
+    let token = json.token
+    let courseId = json.courseId
 
-  canvasFavorites.favoriteCourse(token, courseId, (favorite, err) => {
-    if (err) {
+    if (!token || !courseId) {
       res.render('pages/favorites_failure')
-    } else {
-      res.send(JSON.stringify({
-        favorite: favorite
-      }))
+      return
     }
+
+    canvasFavorites.favoriteCourse(token, courseId, (favorite, err) => {
+      if (err) {
+        res.render('pages/favorites_failure')
+      } else {
+        res.send(JSON.stringify({
+          favorite: favorite
+        }))
+      }
+    })
   })
 })
 
