@@ -18,11 +18,6 @@ server.get('/', (req, res) => {
   res.render('pages/index')
 })
 
-server.get('/promise', async (req, res)=>{
-  let promise = await canvasCourses.thingy()
-  res.send(promise)
-})
-
 server.get('/users', (req, res) => {
   let query = req.query
   let courses = query.courses
@@ -114,7 +109,7 @@ server.post('/favorites', (req, res) => {
     jsonString += data
   })
 
-  req.on('end', () => {
+  req.on('end', async () => {
     let json = JSON.parse(jsonString)
     let token = json.token
     let courseId = json.courseId
@@ -124,15 +119,14 @@ server.post('/favorites', (req, res) => {
       return
     }
 
-    canvasFavorites.favoriteCourse(token, courseId, (favorite, err) => {
-      if (err) {
-        res.render('pages/favorites_failure')
-      } else {
-        res.send(JSON.stringify({
-          favorite: favorite
-        }))
-      }
-    })
+    try {
+      let favorite = await canvasFavorites.favoriteCourse(token, courseId)
+      res.send(JSON.stringify({
+        favorite: favorite
+      }))
+    } catch(err) {
+      res.render('pages/favorites_failure')
+    }
   })
 })
 
