@@ -1,3 +1,6 @@
+require('babel-register')
+require('babel-polyfill')
+
 const express = require('express')
 const server = express()
 const path = require('path')
@@ -13,6 +16,11 @@ server.set('view engine', 'ejs')
 
 server.get('/', (req, res) => {
   res.render('pages/index')
+})
+
+server.get('/promise', async (req, res)=>{
+  let promise = await canvasCourses.thingy()
+  res.send(promise)
 })
 
 server.get('/users', (req, res) => {

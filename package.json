@@ -11,8 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0",
     "ejs": "^2.5.6",
-    "express": "^4.15.3",
+    "express": "^4.15.4",
     "js-yaml": "^3.9.0",
     "path": "^0.12.7",
     "random-strings": "0.0.1",

@@ -5,6 +5,16 @@ const adminToken = `Bearer ${constants.ACCOUNT_ADMIN['token']}`
 const baseUrl = `https://${canvasDomain}/api/v1/accounts/self`
 const random = require('../../random/index.js')
 
+export async function thingy() {
+  return new Promise((resolve, reject)=>{
+    if (true) {
+      resolve('some promise')
+    } else {
+      reject('that sucked')
+    }
+  })
+}
+
 export function createCourse(callback) {
   let courseName = random.courseName()
   let body = {
